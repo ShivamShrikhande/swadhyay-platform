@@ -1,0 +1,21 @@
+package com.swadhyay.auth.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+@AllArgsConstructor
+public class LoginResponse {
+
+    private String token;
+
+    private String tokenType;
+
+    private Long userId;
+
+    private String fullName;
+
+    private String role;
+}
