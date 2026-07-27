@@ -1,0 +1,13 @@
+package com.swadhyay;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SwadhyayPlatformApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SwadhyayPlatformApplication.class, args);
+	}
+
+}
