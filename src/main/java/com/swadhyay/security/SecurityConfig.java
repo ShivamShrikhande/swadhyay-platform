@@ -23,14 +23,12 @@ public class SecurityConfig {
             throws Exception {
 
         http
-
                 .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/users/register",
@@ -40,8 +38,6 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 )
-
-                .httpBasic(Customizer.withDefaults())
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,

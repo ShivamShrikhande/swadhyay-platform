@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -30,4 +32,48 @@ public ApiResponse<UserResponse> register(@Valid @RequestBody UserRequest reques
             .data(response)
             .build();
 }
+    @GetMapping("/me")
+    public ApiResponse<UserResponse> getCurrentUser() {
+
+        UserResponse response = userService.getCurrentUser();
+
+        return ApiResponse.<UserResponse>builder()
+                .success(true)
+                .message("User fetched successfully")
+                .data(response)
+                .build();
+    }
+    @GetMapping("/{id}")
+    public ApiResponse<UserResponse> getUserById(@PathVariable Long id) {
+
+        UserResponse response = userService.getUserById(id);
+
+        return ApiResponse.<UserResponse>builder()
+                .success(true)
+                .message("User fetched successfully")
+                .data(response)
+                .build();
+    }
+    @GetMapping
+    public ApiResponse<List<UserResponse>> getAllUsers() {
+
+        List<UserResponse> response = userService.getAllUsers();
+
+        return ApiResponse.<List<UserResponse>>builder()
+                .success(true)
+                .message("Users fetched successfully")
+                .data(response)
+                .build();
+    }
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteUser(@PathVariable Long id) {
+
+        userService.deleteUser(id);
+
+        return ApiResponse.<Void>builder()
+                .success(true)
+                .message("User deleted successfully")
+                .data(null)
+                .build();
+    }
 }
