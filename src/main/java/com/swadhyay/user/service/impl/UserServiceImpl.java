@@ -19,7 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.swadhyay.kendra.entity.Kendra;
+import com.swadhyay.kendra.repository.KendraRepository;
+import com.swadhyay.user.dto.MemberSearchResponse;
+import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -31,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+   // private final PasswordEncoder passwordEncoder;
+    private final KendraRepository kendraRepository;
 
     @Override
     public UserResponse registerUser(UserRequest request) {
@@ -49,6 +54,12 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userMapper.toEntity(request);
+        //new change
+        Kendra kendra = kendraRepository.findById(request.getKendraId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Kendra not found"));
+
+        user.setKendra(kendra);
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -108,33 +119,80 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toResponse(user);
     }
+//    @Override
+//    public UserResponse updateProfile(UpdateProfileRequest request) {
+//
+//        Authentication authentication =
+//                SecurityContextHolder.getContext().getAuthentication();
+//
+//        String mobileNumber = authentication.getName();
+//
+//        User user = userRepository.findByMobileNumber(mobileNumber)
+//                .orElseThrow(() ->
+//                        new ResourceNotFoundException("User not found"));
+//
+//        // Update editable fields
+//        user.setFirstName(request.getFirstName());
+//        user.setLastName(request.getLastName());
+//        user.setEmail(request.getEmail());
+//        user.setGender(request.getGender());
+//        user.setDateOfBirth(request.getDateOfBirth());
+////        user.setState(request.getState());
+////        user.setDistrict(request.getDistrict());
+////        user.setCity(request.getCity());
+////        user.setVillage(request.getVillage());
+//
+//        User updatedUser = userRepository.save(user);
+//
+//        return userMapper.toResponse(updatedUser);
+//    }
+@Override
+public UserResponse updateProfile(UpdateProfileRequest request) {
+
+    Authentication authentication =
+            SecurityContextHolder.getContext().getAuthentication();
+
+    String mobileNumber = authentication.getName();
+
+    User user = userRepository.findByMobileNumber(mobileNumber)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("User not found"));
+
+    user.setFirstName(request.getFirstName());
+    user.setLastName(request.getLastName());
+    user.setEmail(request.getEmail());
+    user.setGender(request.getGender());
+    user.setDateOfBirth(request.getDateOfBirth());
+
+    Kendra kendra = kendraRepository.findById(request.getKendraId())
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("Kendra not found"));
+
+    user.setKendra(kendra);
+
+    User updatedUser = userRepository.save(user);
+
+    return userMapper.toResponse(updatedUser);
+}
     @Override
-    public UserResponse updateProfile(UpdateProfileRequest request) {
+    public List<MemberSearchResponse> searchMembers(String keyword) {
 
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
+        return userRepository
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+                        keyword,
+                        keyword
+                )
+                .stream()
+                .map(user -> MemberSearchResponse.builder()
+                        .id(user.getId())
+                        .fullName(user.getFirstName() + " " + user.getLastName())
+                        .kendraName(user.getKendra().getName())
+                        .city(user.getKendra().getCity())
+                        .build())
+                .collect(Collectors.toList());
 
-        String mobileNumber = authentication.getName();
-
-        User user = userRepository.findByMobileNumber(mobileNumber)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
-
-        // Update editable fields
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setGender(request.getGender());
-        user.setDateOfBirth(request.getDateOfBirth());
-        user.setState(request.getState());
-        user.setDistrict(request.getDistrict());
-        user.setCity(request.getCity());
-        user.setVillage(request.getVillage());
-
-        User updatedUser = userRepository.save(user);
-
-        return userMapper.toResponse(updatedUser);
     }
+
     @Override
     public void changePassword(ChangePasswordRequest request) {
 

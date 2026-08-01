@@ -4,6 +4,7 @@ import com.swadhyay.user.entity.Gender;
 import com.swadhyay.user.entity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -32,11 +33,13 @@ public class UserRequest {
 
     private LocalDate dateOfBirth;
 
-    private String state;
-
-    private String district;
-
-    private String city;
-
-    private String village;
+//    private String state;
+//
+//    private String district;
+//
+//    private String city;
+//
+//    private String village;
+@NotNull(message = "Kendra is required")
+private Long kendraId;
 }

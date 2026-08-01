@@ -27,13 +27,17 @@ public class UserResponse {
 
     private LocalDate dateOfBirth;
 
-    private String state;
+//    private String state;
+//
+//    private String district;
+//
+//    private String city;
+//
+//    private String village;
 
-    private String district;
+    private Long kendraId;
 
-    private String city;
-
-    private String village;
+    private String kendraName;
 
     private Boolean active;
 }

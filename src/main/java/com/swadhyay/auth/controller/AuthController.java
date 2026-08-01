@@ -4,6 +4,8 @@ import com.swadhyay.auth.dto.*;
 import com.swadhyay.auth.service.AuthenticationService;
 import com.swadhyay.common.dto.ApiResponse;
 import com.swadhyay.user.dto.ChangePasswordRequest;
+import com.swadhyay.user.dto.UpdateProfileRequest;
+import com.swadhyay.user.dto.UserResponse;
 import com.swadhyay.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -73,5 +75,6 @@ public class AuthController {
                 .data(null)
                 .build();
     }
+
 
 }

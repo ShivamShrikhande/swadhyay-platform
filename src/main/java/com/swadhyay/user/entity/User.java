@@ -1,5 +1,5 @@
 package com.swadhyay.user.entity;
-
+import com.swadhyay.kendra.entity.Kendra;
 import com.swadhyay.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,13 +45,16 @@ public class User extends BaseEntity {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    private String state;
-
-    private String district;
-
-    private String city;
-
-    private String village;
+//    private String state;
+//
+//    private String district;
+//
+//    private String city;
+//
+//    private String village;
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "kendra_id")
+private Kendra kendra;
 
     @Column(nullable = false)
     private Boolean active;

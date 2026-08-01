@@ -1,5 +1,6 @@
 package com.swadhyay.user.controller;
 
+import com.swadhyay.common.dto.ApiResponse;
 import com.swadhyay.security.user.CustomUserDetails;
 import com.swadhyay.user.dto.UpdateProfileRequest;
 import com.swadhyay.user.dto.UserResponse;
@@ -20,17 +21,31 @@ public class ProfileController {
     private final UserService userService;
 
     @GetMapping
-    public UserResponse getProfile(
+    public ApiResponse<UserResponse> getProfile(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        return userMapper.toResponse(userDetails.getUser());
+        UserResponse response =
+                userMapper.toResponse(userDetails.getUser());
+
+        return ApiResponse.<UserResponse>builder()
+                .success(true)
+                .message("Profile fetched successfully")
+                .data(response)
+                .build();
     }
 
     @PutMapping
-    public UserResponse updateProfile(
+    public ApiResponse<UserResponse> updateProfile(
             @Valid @RequestBody UpdateProfileRequest request) {
 
-        return userService.updateProfile(request);
+        UserResponse response =
+                userService.updateProfile(request);
+
+        return ApiResponse.<UserResponse>builder()
+                .success(true)
+                .message("Profile updated successfully")
+                .data(response)
+                .build();
     }
 
 }

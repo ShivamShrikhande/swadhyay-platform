@@ -3,6 +3,7 @@ package com.swadhyay.user.dto;
 import com.swadhyay.user.entity.Gender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -23,11 +24,7 @@ public class UpdateProfileRequest {
 
     private LocalDate dateOfBirth;
 
-    private String state;
+    @NotNull(message = "Kendra is required")
+    private Long kendraId;
 
-    private String district;
-
-    private String city;
-
-    private String village;
 }
